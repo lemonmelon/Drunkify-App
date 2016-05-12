@@ -1,0 +1,4 @@
+00000001,Tag et shot, 1, Null;
+00000002, Stå på hænder, 1, Null;
+så er der ål
+nej
