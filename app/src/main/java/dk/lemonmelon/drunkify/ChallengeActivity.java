@@ -18,13 +18,15 @@ public class ChallengeActivity extends AppCompatActivity {
         TextView challengePunishmentView = (TextView)findViewById(R.id.challengePunishmentCounter);
         Button failChallengeButton = (Button)findViewById(R.id.failChallengeButton);
         
-        Challenge challenge = new Challenge(getApplicationContext());
+        ChallengeHandler challengeHandler = new ChallengeHandler(getApplicationContext());
         final GamePlay gamePlay = new GamePlay(getApplicationContext());
 
-        challenge.newChallenge();
+        Challenge challenge = challengeHandler.loadUnpackedChallenge((challengeHandler.getRandomChallengeID()));
+
+
 
         String challengeText = challenge.getChallengeText();
-        String challengePunishment = challenge.getChallengePunishment();
+        String challengePunishment = String.valueOf(challenge.getChallengePunishment());
 
         challengeTextView.setText(challengeText);
         challengePunishmentView.setText(challengePunishment);
@@ -35,9 +37,6 @@ public class ChallengeActivity extends AppCompatActivity {
 
             }
         });
-
-
-
 
     }
     private void goToPlayActivity (){

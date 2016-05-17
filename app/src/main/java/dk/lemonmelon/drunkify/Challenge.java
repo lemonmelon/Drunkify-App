@@ -12,61 +12,31 @@ public class Challenge {
     private Integer challengeID;
     private String challengeText;
     private Integer challengePunishment;
-    private Integer challengeCount = 1;
     private String challengeExtra;
-    private Context context;
-    ChallengeDatabaseHandler challengeDatabaseHandler;
 
-    public Challenge(Context context){
-
-        this.context = context;
-        this.challengeDatabaseHandler = new ChallengeDatabaseHandler(context,null,null,1);
-        this.challengeCount = challengeDatabaseHandler.getChallengeCount();
-
-    }
-    public void newChallenge() {
-
-        //Plus and minus are there to ensure value is never = 0
-
-        Integer challengeID = 1 + (int)(long) Math.round((Math.random())* (challengeCount - 1));
-
-        challengeDatabaseHandler.loadChallengeInfo(challengeID);
+    public void setChallengeInfo(Integer challengeID, String challengeText, Integer challengePunishment, String challengeExtra) {
 
         this.challengeID = challengeID;
-        this.challengeText = challengeDatabaseHandler.getChallengeText();
-        this.challengePunishment = challengeDatabaseHandler.getChallengePunishment();
-        this.challengeExtra = challengeDatabaseHandler.getChallengeExtra();
-
-        Extra extra = new Extra(context);
-
-        if(challengeExtra != null){
-
-            this.challengeText = extra.getNewText(challengeText,challengeExtra,1);
-
-        }
+        this.challengeText = challengeText;
+        this.challengePunishment = challengePunishment;
+        this.challengeExtra = challengeExtra;
 
     }
-    public String getChallengeID() {
+    public Integer getChallengeID() {
 
-        return String.valueOf(challengeID);
+        return challengeID;
     }
     public String getChallengeText() {
 
         return challengeText;
     }
-    public String getChallengePunishment() {
+    public Integer getChallengePunishment() {
 
-        return String.valueOf(challengePunishment);
+        return challengePunishment;
     }
-    public String  getChallengeCount(){
+    public String getChallengeExtra (){
 
-        return String.valueOf(challengeDatabaseHandler.getChallengeCount());
+        return challengeExtra;
 
     }
-
-
-
-
-
-
 }

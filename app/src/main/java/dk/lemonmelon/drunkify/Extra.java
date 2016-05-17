@@ -11,8 +11,8 @@ import dk.lemonmelon.drunkify.DatabaseHandlers.PlayerDatabaseHandler;
 public class Extra {
 
     private Context context;
-    private Integer playerCount = 1;
     Integer databaseRowID = 1;
+
 
     PlayerDatabaseHandler playerDatabaseHandler;
 
@@ -20,47 +20,44 @@ public class Extra {
     public Extra(Context context){
 
         this.context = context;
-        this.playerDatabaseHandler = new PlayerDatabaseHandler(context,null,null,1);
-        this.playerCount = playerDatabaseHandler.getPlayerCount();
-
-
 
     }
-    public String getNewText(String text, String extra, Integer extraNumber){
+    public Challenge unpackChallenge(Challenge challenge){
 
-        String player = "Spiller";
-        String newText = text;
+        this.playerDatabaseHandler = new PlayerDatabaseHandler(context,null,null,1);
 
-        String[] extraSplit = extra.split("_");
+        Integer challengeID = challenge.getChallengeID();
+        String challengeText = challenge.getChallengeText();
+        Integer challengePunishment = challenge.getChallengePunishment();
+        String challengeExtra = challenge.getChallengeExtra();
+
+        String [] extraSplit = challenge.getChallengeExtra().split("_");
+
 
         if (extraSplit[1].equals("Random")){
 
-            this.databaseRowID = 1 + (int)(long) Math.round((Math.random())* (playerCount - 1));
+            Integer count = playerDatabaseHandler.getPlayerCount();
+
+            this.databaseRowID = 1 + (int)(long) Math.round((Math.random())* (count - 1));
+
+            playerDatabaseHandler.loadPlayerInfo(databaseRowID);
+
+            String playerName = playerDatabaseHandler.getPlayerName();
+
+            challengeText = challengeText.replace("!1",playerName);
 
         }
-
         if(extraSplit[0].equals("Player")){
 
             playerDatabaseHandler.loadPlayerInfo(databaseRowID);
-            String playerName = playerDatabaseHandler.getPlayerName();
-
-            newText = text.replace("!" + String.valueOf(extraNumber), playerName);
 
         }
-        return newText;
+
+        challenge.setChallengeInfo(challengeID,challengeText,challengePunishment,null);
+
+        return challenge;
 
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

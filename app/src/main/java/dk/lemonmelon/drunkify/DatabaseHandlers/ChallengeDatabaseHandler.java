@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import dk.lemonmelon.drunkify.Challenge;
 import dk.lemonmelon.drunkify.Extra;
 
 /**
@@ -21,10 +22,6 @@ public class ChallengeDatabaseHandler extends SQLiteOpenHelper {
     public static final String ColumnChallengeText = "text";
     public static final String ColumnChallengePunishment = "punishment";
     public static final String ColumnChallengeExtra = "extra";
-
-    String challengeText = "";
-    Integer challengePunishment = 0;
-    String challengeExtra = "";
 
     public ChallengeDatabaseHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DatabaseName, factory, DatabaseVersion);
@@ -64,7 +61,7 @@ public class ChallengeDatabaseHandler extends SQLiteOpenHelper {
 
     }
 
-    public void loadChallengeInfo(Integer challengeID) {
+    public Challenge getChallengeInfo(Integer challengeID) {
 
         SQLiteDatabase db = getReadableDatabase();
         String query = "SELECT * FROM " + TableGlobalChallenges + " WHERE " + ColumnChallengeID + "=" + challengeID + ";";
@@ -72,27 +69,18 @@ public class ChallengeDatabaseHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
         cursor.moveToFirst();
 
-        challengeText = cursor.getString(cursor.getColumnIndex(ColumnChallengeText));
-        challengePunishment = cursor.getInt(cursor.getColumnIndex(ColumnChallengePunishment));
-        challengeExtra = cursor.getString(cursor.getColumnIndex(ColumnChallengeExtra));
+        String challengeText = cursor.getString(cursor.getColumnIndex(ColumnChallengeText));
+        Integer challengePunishment = cursor.getInt(cursor.getColumnIndex(ColumnChallengePunishment));
+        String challengeExtra = cursor.getString(cursor.getColumnIndex(ColumnChallengeExtra));
 
         cursor.close();
         db.close();
 
-    }
-    public String getChallengeText(){
+        Challenge challenge =  new Challenge();
 
-        return challengeText;
+        challenge.setChallengeInfo(challengeID,challengeText,challengePunishment,challengeExtra);
 
-    }
-    public Integer getChallengePunishment() {
-
-        return challengePunishment;
-
-    }
-    public String getChallengeExtra(){
-
-        return challengeExtra;
+        return challenge;
 
     }
     public Integer getChallengeCount(){
